@@ -8,4 +8,4 @@ const router = express.Router();
 router.get("/profile", protect, getProfile);
 router.put("/profile", protect, updateProfile);
 
-export default router;
+export default router; //git chek
