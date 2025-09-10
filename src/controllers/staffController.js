@@ -1,79 +1,54 @@
-import * as staffService from "../services/staffService.js";
+import Staff from "../models/staffModel.js";
 
-// Get Profile
-export const getProfile = async (req, res, next) => {
-  try {
-    const staff = await staffService.getStaffById(req.user._id);
-    res.json({ success: true, staff });
-  } catch (err) {
-    next(err);
-  }
-};
-
-// Update Profile (Step-wise Onboarding)
+/**
+ * PUT /api/staff/profile
+ * Update or complete onboarding (all fields optional)
+ */
 export const updateProfile = async (req, res, next) => {
   try {
-    const { step, ...data } = req.body;
-    let updates = {};
+    const staffId = req.user._id; // from protect middleware
+    const updateData = req.body; // jo bhi fields bheje vo update hoga
 
-    switch (step) {
-      case "complete_profile_1":
-        updates = { ...data, currentScreen: "complete_profile_2" };
-        break;
-
-      case "complete_profile_2":
-        updates = { ...data, currentScreen: "complete_profile_3" };
-        break;
-
-      case "complete_profile_3":
-        updates = { ...data, currentScreen: "complete_profile_4" };
-        break;
-
-      case "complete_profile_4":
-        updates = { documents: data, currentScreen: "complete_profile_5" };
-        break;
-
-      case "complete_profile_5":
-        updates = {
-          ...data,
-          isSubscribed: true,
-          currentScreen: "complete_profile_6",
-        };
-        break;
-
-      case "complete_profile_6":
-        updates = { currentScreen: "complete_profile_7" };
-        break;
-
-      case "complete_profile_7":
-        updates = { currentScreen: "complete_profile_8" };
-        break;
-
-      case "complete_profile_8":
-        if (data.quizResult === "pass") {
-          updates = {
-            currentScreen: "home_screen",
-            isOnboardingCompleted: true,
-          };
-        } else {
-          updates = { currentScreen: "complete_profile_6" };
-        }
-        break;
-
-      default:
-        return res
-          .status(400)
-          .json({ success: false, message: "Invalid step" });
+    // Find staff
+    let staff = await Staff.findById(staffId);
+    if (!staff) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Staff not found" });
     }
 
-    const staff = await staffService.updateStaff(req.user._id, updates);
+    // Update sirf wahi fields jo body me hai
+    Object.keys(updateData).forEach((key) => {
+      staff[key] = updateData[key];
+    });
+
+    // Save updated staff
+    await staff.save();
 
     res.json({
       success: true,
       message: "Profile updated successfully",
-      currentScreen: staff.currentScreen,
       staff,
     });
+  } catch (err) {
+    console.error("Update Profile Error:", err.message);
+    next(err);
+  }
+};
+
+/**
+ * GET /api/staff/profile
+ * Get profile of logged-in staff
+ */
+export const getProfile = async (req, res, next) => {
+  try {
+    const staff = await Staff.findById(req.user._id);
+    if (!staff) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Staff not found" });
+    }
+    res.json({ success: true, staff });
   } catch (err) {
     next(err);
   }
