@@ -53,7 +53,7 @@ const staffSchema = new mongoose.Schema(
     // Profile 5
     registrationFee: Number,
     uniformFee: Number,
-    uniformAddress: String,
+    //uniformAddress: String,
     uniformSize: String,
   },
   { timestamps: true }
