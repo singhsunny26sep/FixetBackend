@@ -31,8 +31,8 @@ const staffSchema = new mongoose.Schema(
     availability: [String],
 
     // Profile 3 (skip for now)
-    preferredWorkZone: { zoneName: String },
-    secondaryWorkZone: { zoneName: String },
+    preferredWorkZone: String,
+    secondaryWorkZone: String,
     willingnessToTravel: String,
 
     // Profile 4
