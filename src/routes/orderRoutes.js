@@ -1,17 +1,12 @@
-// src/routes/orderRoutes.js
+// routes/orderRoutes.js
 import express from "express";
+import { createOrder, verifyOrder } from "../controllers/orderController.js";
 import { protect } from "../middlewares/authMiddleware.js";
-import {
-  createOrderController,
-  verifyOrderController,
-} from "../controllers/orderController.js";
 
 const router = express.Router();
 
-// Create Order
-router.post("/create-order", protect, createOrderController);
-
-// Verify Order
-router.put("/verify-order", protect, verifyOrderController);
+// Staff/Admin login required
+router.post("/create-order", protect, createOrder);
+router.put("/verify-order", protect, verifyOrder);
 
 export default router;
