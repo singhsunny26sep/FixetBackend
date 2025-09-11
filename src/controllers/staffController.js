@@ -17,18 +17,21 @@ export const updateProfile = async (req, res, next) => {
         .json({ success: false, message: "Staff not found" });
     }
 
-    // Update sirf wahi fields jo body me hai
+    // Update all fields (including nested)
     Object.keys(updateData).forEach((key) => {
-      staff[key] = updateData[key];
+      staff.set(key, updateData[key]); // ✅ handles nested fields
     });
 
     // Save updated staff
     await staff.save();
 
+    // fresh fetch to ensure updated fields
+    const updatedStaff = await Staff.findById(staffId);
+
     res.json({
       success: true,
       message: "Profile updated successfully",
-      staff,
+      staff: updatedStaff,
     });
   } catch (err) {
     console.error("Update Profile Error:", err.message);
