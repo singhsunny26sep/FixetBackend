@@ -26,7 +26,7 @@ export const verifyOtp = async (req, res, next) => {
     res.json({
       success: true,
       message: "OTP verified successfully",
-      token,
+      token, // 7-day token
       staff,
     });
   } catch (err) {
