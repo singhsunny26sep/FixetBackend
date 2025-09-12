@@ -5,6 +5,7 @@ import {
   createOrderDb,
   updateOrderByRazorpayId,
 } from "../services/orderService.js";
+import Staff from "../models/staffModel.js"; // ✅ Staff model import
 
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
@@ -70,7 +71,16 @@ export const verifyOrder = async (req, res) => {
       status: "paid",
     });
 
-    res.json({ success: true, message: "Payment verified", order });
+    // ✅ Staff का isSubscribed true कर दो
+    if (order?.staffId) {
+      await Staff.findByIdAndUpdate(order.staffId, { isSubscribed: true });
+    }
+
+    res.json({
+      success: true,
+      message: "Payment verified & Staff subscribed",
+      order,
+    });
   } catch (err) {
     console.error("Verify Order Error:", err);
     res.status(500).json({ success: false, message: err.message });
