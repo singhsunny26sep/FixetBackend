@@ -59,24 +59,19 @@ export const deleteCategory = async (req, res) => {
 // SUBCATEGORY CONTROLLERS
 export const createSubCategory = async (req, res) => {
   try {
-    const { categoryId, name, description } = req.body;
-    const image = req.file ? req.file.path : null; // Cloudinary URL
+    const { categoryId, subcategories } = req.body;
 
-    // check category exists
     const category = await Category.findById(categoryId);
     if (!category)
       return res
         .status(404)
         .json({ success: false, message: "Category not found" });
 
-    const subCat = await createSubCategoryService({
-      name,
-      description,
-      category: categoryId,
-      image,
-    });
+    // Push all at once
+    category.subcategories.push(...subcategories);
+    await category.save();
 
-    res.status(201).json({ success: true, data: subCat });
+    res.status(201).json({ success: true, data: category });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
