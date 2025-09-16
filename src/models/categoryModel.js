@@ -5,6 +5,13 @@ const categorySchema = new mongoose.Schema(
     name: { type: String, required: true },
     description: String,
     image: String, // image URL
+    subcategories: [
+      {
+        name: { type: String, required: true },
+        description: String,
+        image: String,
+      },
+    ],
   },
   { timestamps: true }
 );

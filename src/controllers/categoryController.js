@@ -1,3 +1,6 @@
+import Category from "../models/categoryModel.js";
+import SubCategory from "../models/subCategoryModel.js";
+
 import {
   createCategoryService,
   getCategoriesService,
