@@ -19,7 +19,7 @@ export const createOrder = async (req, res) => {
 
     // Razorpay Order create
     const order = await razorpay.orders.create({
-      amount,
+      amount: amount * 100,
       currency: currency || "INR",
       notes,
     });
