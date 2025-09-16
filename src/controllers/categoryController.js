@@ -1,6 +1,5 @@
 import Category from "../models/categoryModel.js";
 import SubCategory from "../models/subCategoryModel.js";
-
 import {
   createCategoryService,
   getCategoriesService,
@@ -12,23 +11,15 @@ import {
   deleteSubCategoryService,
 } from "../services/categoryService.js";
 
-// Helper to get file URL
-const getFileUrl = (req, filePath) => {
-  return `${req.protocol}://${req.get("host")}/${filePath.replace(/\\/g, "/")}`;
-};
-
 // CATEGORY CONTROLLERS
 export const createCategory = async (req, res) => {
   try {
     const { name, description } = req.body;
-    let imageUrl = req.file ? getFileUrl(req, req.file.path) : null;
+    // Cloudinary URL
+    const image = req.file ? req.file.path : null;
 
-    const category = await createCategoryService({
-      name,
-      description,
-      image: imageUrl,
-    });
-    res.json({ success: true, data: category });
+    const category = await createCategoryService({ name, description, image });
+    res.status(201).json({ success: true, data: category });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
@@ -47,7 +38,7 @@ export const updateCategory = async (req, res) => {
   try {
     const { name, description } = req.body;
     let updateData = { name, description };
-    if (req.file) updateData.image = getFileUrl(req, req.file.path);
+    if (req.file) updateData.image = req.file.path; // Cloudinary URL
 
     const category = await updateCategoryService(req.params.id, updateData);
     res.json({ success: true, data: category });
@@ -68,19 +59,24 @@ export const deleteCategory = async (req, res) => {
 // SUBCATEGORY CONTROLLERS
 export const createSubCategory = async (req, res) => {
   try {
-    const { categoryId, subcategories } = req.body; // subcategories = array of objects [{name, description}, ...]
+    const { categoryId, name, description } = req.body;
+    const image = req.file ? req.file.path : null; // Cloudinary URL
 
+    // check category exists
     const category = await Category.findById(categoryId);
     if (!category)
       return res
         .status(404)
         .json({ success: false, message: "Category not found" });
 
-    // Push all at once
-    category.subcategories.push(...subcategories);
-    await category.save();
+    const subCat = await createSubCategoryService({
+      name,
+      description,
+      category: categoryId,
+      image,
+    });
 
-    res.status(201).json({ success: true, data: category });
+    res.status(201).json({ success: true, data: subCat });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
@@ -99,7 +95,7 @@ export const updateSubCategory = async (req, res) => {
   try {
     const { name, description, categoryId } = req.body;
     let updateData = { name, description, category: categoryId };
-    if (req.file) updateData.image = getFileUrl(req, req.file.path);
+    if (req.file) updateData.image = req.file.path; // Cloudinary URL
 
     const subCat = await updateSubCategoryService(req.params.id, updateData);
     res.json({ success: true, data: subCat });
