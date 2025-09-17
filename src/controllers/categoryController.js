@@ -61,17 +61,36 @@ export const createSubCategory = async (req, res) => {
   try {
     const { categoryId, subcategories } = req.body;
 
+    // 1. Check category exist
     const category = await Category.findById(categoryId);
-    if (!category)
+    if (!category) {
       return res
         .status(404)
         .json({ success: false, message: "Category not found" });
+    }
 
-    // Push all at once
-    category.subcategories.push(...subcategories);
+    // 2. Create each SubCategory separately
+    const newSubCatIds = [];
+    for (const sub of subcategories) {
+      const newSubCat = await SubCategory.create({
+        name: sub.name,
+        description: sub.description,
+        image: sub.image,
+        category: categoryId,
+      });
+      newSubCatIds.push(newSubCat._id);
+    }
+
+    // 3. Push their IDs into Category
+    category.subcategories.push(...newSubCatIds);
     await category.save();
 
-    res.status(201).json({ success: true, data: category });
+    // 4. Populate subcategories (optional)
+    const populatedCategory = await Category.findById(categoryId).populate(
+      "subcategories"
+    );
+
+    res.status(201).json({ success: true, data: populatedCategory });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
