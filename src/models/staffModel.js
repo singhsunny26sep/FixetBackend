@@ -8,6 +8,7 @@ const staffSchema = new mongoose.Schema(
     isOnboardingCompleted: { type: Boolean, default: false },
     isSubscribed: { type: Boolean, default: false },
     isDeleted: { type: Boolean, default: false },
+    isCheckedIn: { type: Boolean, default: false },
 
     // Profile 1
     name: String,

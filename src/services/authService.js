@@ -55,9 +55,9 @@ export const verifyOtp = async (phone, otp) => {
 
       // Generate JWT token
       const token = jwt.sign(
-        { id: staff._id.toString(), phone: staff.phone, role: staff.role }, // ✅ toString() lagao
+        { id: staff._id.toString(), phone: staff.phone, role: staff.role },
         process.env.JWT_SECRET,
-        { expiresIn: "1h" }
+        { expiresIn: "7d" } // ✅ ab token 7 din valid rahega
       );
 
       return { token, staff };
