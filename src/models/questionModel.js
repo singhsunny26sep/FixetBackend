@@ -1,10 +1,5 @@
 import mongoose from "mongoose";
 
-const optionSchema = new mongoose.Schema({
-  text: { type: String, required: true },
-  isCorrect: { type: Boolean, default: false },
-});
-
 const questionSchema = new mongoose.Schema(
   {
     category: {
@@ -17,10 +12,18 @@ const questionSchema = new mongoose.Schema(
       ref: "SubCategory",
     },
     text: { type: String, required: true },
-    options: [optionSchema], // multiple options with correct flag
+    options: [
+      {
+        text: String,
+        isCorrect: { type: Boolean, default: false },
+      },
+    ],
   },
   { timestamps: true }
 );
 
-const Question = mongoose.model("Question", questionSchema);
+// Agar pehle se compiled hai to usko use karo, otherwise naya banao
+const Question =
+  mongoose.models.Question || mongoose.model("Question", questionSchema);
+
 export default Question;
