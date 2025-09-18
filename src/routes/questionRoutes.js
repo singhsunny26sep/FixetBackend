@@ -9,19 +9,19 @@ import {
 
 const router = express.Router();
 
-// CREATE Question
+// CREATE (single or multiple)
 router.post("/questions", createQuestion);
 
-// GET All Questions (with optional category/subCategory filter)
+// GET
 router.get("/questions", getQuestions);
 
-// UPDATE Question
+// UPDATE
 router.put("/questions/:id", updateQuestion);
 
-// DELETE Question
+// DELETE
 router.delete("/questions/:id", deleteQuestion);
 
-//  Evaluate Staff Answers (pass/fail check)
+// EVALUATE
 router.post("/questions/evaluate", evaluateAnswers);
 
 export default router;

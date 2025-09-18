@@ -11,18 +11,19 @@ const questionSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "SubCategory",
     },
-    questionText: { type: String, required: true },
+    text: { type: String, required: true },
     options: [
       {
-        text: { type: String, required: true },
+        text: String,
         isCorrect: { type: Boolean, default: false },
       },
     ],
-    isActive: { type: Boolean, default: true },
   },
   { timestamps: true }
 );
 
-const Question = mongoose.model("Question", questionSchema);
+// Agar pehle se compiled hai to usko use karo, otherwise naya banao
+const Question =
+  mongoose.models.Question || mongoose.model("Question", questionSchema);
 
 export default Question;
