@@ -1,14 +1,29 @@
+import mongoose from "mongoose";
 import Question from "../models/questionModel.js";
 
 // CREATE multiple questions
 export const createQuestionService = (data) => Question.create(data);
 
 // GET questions (random order)
-export const getQuestionsService = (filter = {}) =>
-  Question.aggregate([
-    { $match: filter },
-    { $sample: { size: 0 } }, // 0 = all matching questions, shuffled randomly
+export const getQuestionsService = async (filter = {}) => {
+  const mongoFilter = { ...filter };
+
+  if (mongoFilter.category) {
+    mongoFilter.category = new mongoose.Types.ObjectId(mongoFilter.category);
+  }
+  if (mongoFilter.subCategory) {
+    mongoFilter.subCategory = new mongoose.Types.ObjectId(
+      mongoFilter.subCategory
+    );
+  }
+
+  const count = await Question.countDocuments(mongoFilter);
+
+  return Question.aggregate([
+    { $match: mongoFilter },
+    { $sample: { size: count } }, // random order
   ]);
+};
 
 // UPDATE question by ID
 export const updateQuestionService = (id, data) =>

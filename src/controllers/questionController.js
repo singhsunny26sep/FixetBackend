@@ -28,7 +28,7 @@ export const createQuestion = async (req, res) => {
 
       let catId;
       if (mongoose.Types.ObjectId.isValid(categoryInput)) {
-        catId = categoryInput; // already ObjectId
+        catId = new mongoose.Types.ObjectId(categoryInput);
       } else {
         const categoryDoc = await Category.findOne({ name: categoryInput });
         if (!categoryDoc) continue;
@@ -51,7 +51,6 @@ export const createQuestion = async (req, res) => {
     }
 
     const saved = await createQuestionService(allQuestions);
-
     res.status(201).json({ success: true, data: saved });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
