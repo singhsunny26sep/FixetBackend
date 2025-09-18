@@ -8,7 +8,7 @@ import {
   evaluateAnswersService,
 } from "../services/questionService.js";
 
-// CREATE Questions (multiple questions per category, ObjectId support)
+// CREATE Questions (multiple per category)
 export const createQuestion = async (req, res) => {
   try {
     const { questionsByCategory } = req.body;
@@ -24,20 +24,17 @@ export const createQuestion = async (req, res) => {
 
     for (const cat of questionsByCategory) {
       const { category: categoryInput, questions } = cat;
-
       if (!categoryInput || !Array.isArray(questions)) continue;
 
-      // Determine category ObjectId
       let catId;
       if (mongoose.Types.ObjectId.isValid(categoryInput)) {
-        catId = categoryInput; // category is already ObjectId
+        catId = categoryInput; // already ObjectId
       } else {
         const categoryDoc = await Category.findOne({ name: categoryInput });
-        if (!categoryDoc) continue; // skip if category not found
+        if (!categoryDoc) continue;
         catId = categoryDoc._id;
       }
 
-      // Inject category ObjectId into each question
       const questionsWithCategory = questions.map((q) => ({
         ...q,
         category: catId,
@@ -61,7 +58,7 @@ export const createQuestion = async (req, res) => {
   }
 };
 
-// GET ALL Questions (optional filter by category/subCategory)
+// GET Questions (random order)
 export const getQuestions = async (req, res) => {
   try {
     const filter = {};
@@ -75,7 +72,7 @@ export const getQuestions = async (req, res) => {
   }
 };
 
-// UPDATE Question by ID
+// UPDATE Question
 export const updateQuestion = async (req, res) => {
   try {
     const question = await updateQuestionService(req.params.id, req.body);
@@ -85,7 +82,7 @@ export const updateQuestion = async (req, res) => {
   }
 };
 
-// DELETE Question by ID
+// DELETE Question
 export const deleteQuestion = async (req, res) => {
   try {
     await deleteQuestionService(req.params.id);
@@ -95,7 +92,7 @@ export const deleteQuestion = async (req, res) => {
   }
 };
 
-// EVALUATE Staff Answers (pass/fail check)
+// EVALUATE Answers
 export const evaluateAnswers = async (req, res) => {
   try {
     const { categoryId, answers } = req.body;
