@@ -59,8 +59,8 @@ export const updateProfile = async (req, res, next) => {
       new: true,
       runValidators: true,
     })
-      .populate("categories")
-      .populate("subCategories");
+      .populate("primaryService")
+      .populate("secondaryServices");
 
     if (!staff)
       return res
