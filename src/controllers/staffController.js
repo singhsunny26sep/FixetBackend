@@ -26,6 +26,7 @@ export const updateProfile = async (req, res, next) => {
     const allowedFields = [
       "name",
       "email",
+      "currentScreen",
       "dob",
       "gender",
       "profileImage",
