@@ -52,8 +52,9 @@ export const verifyOtp = async (phone, otp) => {
 
 export const resendOtp = async (phone) => {
   const response = await axios.get(
-    `https://2factor.in/API/V1/${TWO_FACTOR_API_KEY}/SMS/AUTOGEN/${phone}`
+    `https://2factor.in/API/V1/${TWO_FACTOR_API_KEY}/SMS/${phone}/AUTOGEN`
   );
+
   if (response.data.Status !== "Success")
     throw new Error("Failed to resend OTP");
 
