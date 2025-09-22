@@ -48,6 +48,7 @@ export const updateProfile = async (req, res, next) => {
       "uniformSize",
       "categories",
       "subCategories",
+      "isCheckedIn",
       "preferredWorkZone",
       "secondaryWorkZone",
       "willingnessToTravel",
