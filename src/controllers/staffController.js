@@ -48,6 +48,9 @@ export const updateProfile = async (req, res, next) => {
       "uniformSize",
       "categories",
       "subCategories",
+      "preferredWorkZone",
+      "secondaryWorkZone",
+      "willingnessToTravel",
     ];
 
     const updates = {};
