@@ -74,3 +74,21 @@ export const updateProfile = async (req, res, next) => {
     next(err);
   }
 };
+
+export const deleteAccount = async (req, res, next) => {
+  try {
+    const staff = await Staff.findById(req.user._id);
+    if (!staff)
+      return res
+        .status(404)
+        .json({ success: false, message: "Staff not found" });
+
+    // Soft delete
+    staff.isDeleted = true;
+    await staff.save();
+
+    res.json({ success: true, message: "Account deleted successfully" });
+  } catch (err) {
+    next(err);
+  }
+};
