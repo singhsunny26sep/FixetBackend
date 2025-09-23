@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import Question from "../models/questionModel.js";
+import Staff from "../models/staffModel.js";
 
 // CREATE multiple questions
 export const createQuestionService = (data) => Question.create(data);
@@ -33,7 +34,7 @@ export const updateQuestionService = (id, data) =>
 export const deleteQuestionService = (id) => Question.findByIdAndDelete(id);
 
 // Evaluate staff/customer answers
-export const evaluateAnswersService = async (categoryId, answers) => {
+export const evaluateAnswersService = async (categoryId, answers, staffId) => {
   const questions = await Question.find({ category: categoryId });
 
   let correctCount = 0;
@@ -51,9 +52,33 @@ export const evaluateAnswersService = async (categoryId, answers) => {
     }
   });
 
-  return {
+  const result = {
     total: questions.length,
     correct: correctCount,
     status: correctCount >= 3 ? "pass" : "fail",
+  };
+
+  let staff = null;
+
+  if (staffId) {
+    if (result.status === "pass") {
+      // ✅ pass case me update
+      staff = await Staff.findByIdAndUpdate(
+        staffId,
+        {
+          isOnboardingCompleted: true,
+          currentScreen: "homeScreen",
+        },
+        { new: true }
+      );
+    } else {
+      // ❌ fail case me staff as-is
+      staff = await Staff.findById(staffId);
+    }
+  }
+
+  return {
+    ...result,
+    staff,
   };
 };

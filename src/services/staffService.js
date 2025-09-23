@@ -7,3 +7,7 @@ export const getStaffById = async (id) => {
 export const updateStaff = async (id, updates) => {
   return await Staff.findByIdAndUpdate(id, updates, { new: true });
 };
+
+export const softDeleteStaff = async (id) => {
+  return await Staff.findByIdAndUpdate(id, { isDeleted: true }, { new: true });
+};

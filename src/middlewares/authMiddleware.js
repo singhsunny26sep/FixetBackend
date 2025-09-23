@@ -12,7 +12,7 @@ export const protect = async (req, res, next) => {
       token = req.headers.authorization.split(" ")[1];
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-      req.user = await Staff.findById(decoded.id);
+      req.user = await Staff.findOne({ _id: decoded.id, isDeleted: false });
 
       if (!req.user) {
         return res

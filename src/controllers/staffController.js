@@ -48,6 +48,7 @@ export const updateProfile = async (req, res, next) => {
       "uniformSize",
       "categories",
       "subCategories",
+      "isCheckedIn",
       "preferredWorkZone",
       "secondaryWorkZone",
       "willingnessToTravel",
@@ -70,6 +71,44 @@ export const updateProfile = async (req, res, next) => {
         .status(404)
         .json({ success: false, message: "Staff not found" });
     res.json({ success: true, message: "Profile updated", staff });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const deleteAccount = async (req, res, next) => {
+  try {
+    const { reason, message } = req.body;
+
+    if (!reason || !message) {
+      return res.status(400).json({
+        success: false,
+        message: "Reason and message are required",
+      });
+    }
+
+    const staff = await Staff.findByIdAndUpdate(
+      req.user._id,
+      {
+        isDeleted: true,
+        deletedReason: reason,
+        deletedMessage: message,
+      },
+      { new: true }
+    );
+
+    if (!staff) {
+      return res.status(404).json({
+        success: false,
+        message: "Staff not found",
+      });
+    }
+
+    res.json({
+      success: true,
+      message: "Account deleted successfully",
+      staff,
+    });
   } catch (err) {
     next(err);
   }
