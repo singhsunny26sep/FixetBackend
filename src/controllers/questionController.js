@@ -91,11 +91,10 @@ export const deleteQuestion = async (req, res) => {
   }
 };
 
-// EVALUATE Answers
 export const evaluateAnswers = async (req, res) => {
   try {
-    const { categoryId, answers } = req.body;
-    const result = await evaluateAnswersService(categoryId, answers);
+    const { categoryId, answers, staffId } = req.body; // 👈 staffId destructure
+    const result = await evaluateAnswersService(categoryId, answers, staffId); // 👈 service ko pass karo
     res.json({ success: true, data: result });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
