@@ -8,7 +8,8 @@ const supportSchema = new mongoose.Schema(
     type: { type: String, enum: ["help", "support"], required: true },
     title: { type: String, required: true },
     message: { type: String, required: true },
-    imageUrl: { type: String },
+    imageUrl: [{ type: String }],
+
     status: { type: String, enum: ["open", "closed"], default: "open" },
   },
   { timestamps: true }
