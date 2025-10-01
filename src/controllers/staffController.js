@@ -1,4 +1,5 @@
 import Staff from "../models/staffModel.js";
+import { recoverStaff } from "../services/staffService.js";
 
 // Get profile
 export const getProfile = async (req, res, next) => {
@@ -114,3 +115,26 @@ export const deleteAccount = async (req, res, next) => {
   }
 };
 // asf
+
+export const recoverAccount = async (req, res, next) => {
+  try {
+    console.log("Recovering staff ID:", req.user._id);
+    const staff = await recoverStaff(req.user._id);
+
+    if (!staff) {
+      return res.status(404).json({
+        success: false,
+        message: "Staff not found",
+      });
+    }
+
+    res.json({
+      success: true,
+      message: "Account recovered successfully",
+      staff,
+    });
+  } catch (err) {
+    console.log("Recover error:", err);
+    next(err);
+  }
+};
