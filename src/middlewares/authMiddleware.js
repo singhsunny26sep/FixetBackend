@@ -12,8 +12,11 @@ export const protect = async (req, res, next) => {
       token = req.headers.authorization.split(" ")[1];
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-      req.user = await Staff.findOne({ _id: decoded.id, isDeleted: false });
-
+      req.user = {
+        _id: decoded.id, // ✅ must
+        phone: decoded.phone,
+        role: decoded.role,
+      };
       if (!req.user) {
         return res
           .status(401)
