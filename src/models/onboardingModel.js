@@ -16,6 +16,12 @@ const onboardingSchema = new mongoose.Schema(
       hi: { type: String, trim: true },
       mr: { type: String, trim: true },
     },
+    role: {
+      type: String,
+      enum: ["customer", "staff"],
+      required: true,
+      default: "customer", 
+    },
   },
   { timestamps: true }
 );
