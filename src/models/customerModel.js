@@ -7,16 +7,21 @@ const customerSchema = new mongoose.Schema(
     name: String,
     email: String,
     role: { type: String, default: "customer" },
+    deviceToken: String, // FCM token
     currentScreen: { type: String, default: "login_screen" },
     isOnboardingCompleted: { type: Boolean, default: false },
     isSubscribed: { type: Boolean, default: false },
     isDeleted: { type: Boolean, default: false },
     isCheckedIn: { type: Boolean, default: false },
-    secondaryServices: [{ type: mongoose.Schema.Types.ObjectId, ref: "Service" }],
+    secondaryServices: [
+      { type: mongoose.Schema.Types.ObjectId, ref: "Service" },
+    ],
     languagesKnown: [String],
     availability: [String],
     categories: [{ type: mongoose.Schema.Types.ObjectId, ref: "Category" }],
-    subCategories: [{ type: mongoose.Schema.Types.ObjectId, ref: "SubCategory" }],
+    subCategories: [
+      { type: mongoose.Schema.Types.ObjectId, ref: "SubCategory" },
+    ],
   },
   { timestamps: true }
 );

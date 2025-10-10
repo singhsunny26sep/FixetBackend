@@ -21,6 +21,7 @@ const staffSchema = new mongoose.Schema(
   {
     phone: { type: String, required: true, unique: true },
     role: { type: String, default: "staff" },
+    deviceToken: String, // FCM token
     currentScreen: { type: String, default: "login_screen" },
     isOnboardingCompleted: { type: Boolean, default: false },
     isSubscribed: { type: Boolean, default: false },
