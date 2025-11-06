@@ -72,3 +72,14 @@ export const loginPartner = async (req, res) => {
     res.status(401).json({ success: false, message: err.message });
   }
 };
+
+export const getPartnerProfile = async (req, res) => {
+  try {
+    res.status(200).json({
+      success: true,
+      partner: req.partner,
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
