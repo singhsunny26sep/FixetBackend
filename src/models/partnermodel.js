@@ -8,6 +8,8 @@ const partnerSchema = new mongoose.Schema(
     phone: { type: String, required: true },
     password: { type: String, required: true },
     address: { type: String },
+    bankName: { type: String, required: true },
+    accountNumber: { type: String, required: true },
 
     gstNumber: { type: String },
     documents: {

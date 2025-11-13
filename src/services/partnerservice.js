@@ -4,7 +4,16 @@ import jwt from "jsonwebtoken";
 
 // Register new partner
 export const registerPartner = async (data) => {
-  const { name, shopName, email, phone, password, address } = data;
+  const {
+    name,
+    shopName,
+    email,
+    phone,
+    password,
+    address,
+    bankName,
+    accountNumber,
+  } = data;
 
   const existing = await Partner.findOne({ email });
   if (existing) throw new Error("Email already registered");
@@ -18,6 +27,8 @@ export const registerPartner = async (data) => {
     phone,
     password: hashed,
     address,
+    bankName,
+    accountNumber,
   });
 
   return partner;
