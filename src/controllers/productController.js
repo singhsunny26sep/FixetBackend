@@ -30,6 +30,19 @@ export const createProducts = async (req, res) => {
   }
 };
 
+//  Admin approves/rejects product
+export const updateProductStatus = async (req, res) => {
+  try {
+    const { status } = req.body; // approved, rejected, pending
+    const product = await productService.updateStatus(req.params.id, status);
+    res
+      .status(200)
+      .json({ success: true, message: "Product status updated", product });
+  } catch (err) {
+    res.status(400).json({ success: false, message: err.message });
+  }
+};
+
 // Get All Products (admin or partner)
 export const getAllProducts = async (req, res) => {
   try {
