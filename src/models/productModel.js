@@ -10,9 +10,16 @@ const productSchema = new mongoose.Schema(
     name: { type: String, required: true },
     description: { type: String },
     price: { type: Number, required: true },
-    category: { type: String },
+    category: { type: String, required: true }, // partner will select category
     image: { type: String },
+    status: {
+      type: String,
+      enum: ["pending", "approved", "rejected"],
+      default: "pending",
+    },
+    adminImage: { type: String }, // admin can replace image
   },
+
   { timestamps: true }
 );
 

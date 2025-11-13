@@ -2,6 +2,7 @@ import express from "express";
 import { upload } from "../middlewares/upload.js";
 import {
   createProducts,
+  updateProductStatus,
   getAllProducts,
   updateProductImage,
   deleteProduct,
@@ -13,6 +14,9 @@ const router = express.Router();
 
 // Partner creates multiple products with images
 router.post("/", partnerAuth, upload.array("images", 10), createProducts);
+
+// Admin approves/rejects product
+router.put("/status/:id", adminProtect, updateProductStatus);
 
 // Get all products (admin or partner)
 router.get("/", getAllProducts);

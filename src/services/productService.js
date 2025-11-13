@@ -16,6 +16,17 @@ export const createProducts = async (partnerId, products, images = []) => {
   return createdProducts;
 };
 
+//  Update product status (admin)
+export const updateStatus = async (productId, status) => {
+  const product = await Product.findByIdAndUpdate(
+    productId,
+    { status },
+    { new: true }
+  );
+  if (!product) throw new Error("Product not found");
+  return product;
+};
+
 // Get all products
 export const getAllProducts = async () => {
   return await Product.find().populate("partner", "name shopName email");
