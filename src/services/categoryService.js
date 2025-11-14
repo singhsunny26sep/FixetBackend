@@ -17,3 +17,5 @@ export const updateSubCategoryService = (id, data) =>
   SubCategory.findByIdAndUpdate(id, data, { new: true });
 export const deleteSubCategoryService = (id) =>
   SubCategory.findByIdAndDelete(id);
+export const getCategoryByIdService = (id) =>
+  Category.findById(id).populate("subcategories", "name description image");
