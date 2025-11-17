@@ -6,7 +6,7 @@ import {
   getAllProducts,
   updateProductImage,
   deleteProduct,
-} from "../controllers/ProductController.js";
+} from "../controllers/productController.js";
 import { adminProtect } from "../middlewares/adminAuthMiddleware.js";
 import { partnerAuth } from "../middlewares/partnerAuth.js";
 
