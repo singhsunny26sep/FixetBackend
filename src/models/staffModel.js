@@ -27,6 +27,8 @@ const staffSchema = new mongoose.Schema(
     isSubscribed: { type: Boolean, default: false },
     isDeleted: { type: Boolean, default: false },
     isCheckedIn: { type: Boolean, default: false },
+    isVerified: { type: Boolean, default: true },
+    isAvailable: { type: Boolean, default: true },
 
     // Profile 1
     name: String,
