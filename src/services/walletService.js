@@ -14,7 +14,7 @@ class WalletService {
     return wallet;
   }
 
-  async addMoneyOrder(userId, amount) {
+  async addMoneyOrder(userId, amount, paymentMethod) {
     const razor = new Razorpay({
       key_id: process.env.RAZORPAY_KEY_ID,
       key_secret: process.env.RAZORPAY_SECRET,
@@ -24,6 +24,10 @@ class WalletService {
       amount: amount * 100,
       currency: "INR",
       receipt: "wallet_" + Date.now(),
+      notes: {
+        userId,
+        paymentMethod,
+      },
     });
 
     return order;
