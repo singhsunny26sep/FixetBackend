@@ -8,7 +8,8 @@ export const getWallet = async (req, res) => {
 export const createAddMoneyOrder = async (req, res) => {
   const order = await walletService.addMoneyOrder(
     req.user._id,
-    req.body.amount
+    req.body.amount,
+    req.body.paymentMethod
   );
   res.json({ success: true, order });
 };
