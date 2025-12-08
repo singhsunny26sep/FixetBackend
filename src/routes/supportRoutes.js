@@ -8,13 +8,8 @@ import { protect } from "../middlewares/authMiddleware.js"; // JWT protect middl
 
 const router = express.Router();
 
-// CREATE / UPDATE Ticket → POST
 router.post("/", protect, createOrUpdateTicket);
-
-// DELETE Ticket → DELETE
 router.delete("/", protect, deleteTicket);
-
-// GET Tickets (role-based) → GET
 router.get("/", protect, getTickets);
 
 export default router;

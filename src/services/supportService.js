@@ -1,32 +1,20 @@
 import Support from "../models/supportModel.js";
 
-// CREATE / UPDATE Ticket
-export const upsertTicket = async ({
-  email,
-  role,
-  type,
-  title,
-  message,
-  imageUrl,
-}) => {
+// CREATE / UPDATE
+export const upsertTicket = async ({ role, category, title, message }) => {
   return await Support.findOneAndUpdate(
-    { email, role, title }, // unique key per user & title
-    { type, message, imageUrl },
+    { role, category, title }, // unique
+    { message },
     { upsert: true, new: true }
   );
 };
 
-// DELETE Ticket
-export const deleteTicket = async ({ email, role, title }) => {
-  return await Support.findOneAndDelete({ email, role, title });
+// DELETE
+export const deleteTicket = async ({ role, category, title }) => {
+  return await Support.findOneAndDelete({ role, category, title });
 };
 
-// GET Tickets by role
+// STAFF → All tickets
 export const getTicketsByRole = async ({ role }) => {
-  return await Support.find({ role });
-};
-
-// GET single Ticket by email & title
-export const getTicket = async ({ email, title }) => {
-  return await Support.findOne({ email, title });
+  return await Support.find({ role }).sort({ createdAt: -1 });
 };

@@ -2,15 +2,33 @@ import mongoose from "mongoose";
 
 const supportSchema = new mongoose.Schema(
   {
-    name: { type: String, required: true },
-    email: { type: String, required: true },
-    role: { type: String, enum: ["staff", "customer"], required: true },
-    type: { type: String, enum: ["help", "support"], required: true },
-    title: { type: String, required: true },
-    message: { type: String, required: true },
-    imageUrl: [{ type: String }],
+    role: {
+      type: String,
+      enum: ["staff", "customer"],
+      required: true,
+    },
 
-    status: { type: String, enum: ["open", "closed"], default: "open" },
+    category: {
+      type: String,
+      enum: ["Booking", "Service", "Parts", "Bill", "Invoice"],
+      required: true,
+    },
+
+    title: {
+      type: String,
+      required: true,
+    },
+
+    message: {
+      type: String,
+      required: true,
+    },
+
+    status: {
+      type: String,
+      enum: ["open", "closed"],
+      default: "open",
+    },
   },
   { timestamps: true }
 );
