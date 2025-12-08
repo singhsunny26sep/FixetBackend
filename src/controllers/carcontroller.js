@@ -8,7 +8,7 @@ import {
 // ================= CREATE CAR =================
 export const createCar = async (req, res) => {
   try {
-    const { brand, model } = req.body;
+    const { brand, model, price } = req.body;
 
     if (!req.file) {
       return res.status(400).json({
@@ -22,6 +22,7 @@ export const createCar = async (req, res) => {
     const car = await createCarService({
       brand,
       model,
+      price,
       image,
     });
 

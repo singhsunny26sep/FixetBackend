@@ -16,6 +16,10 @@ const carSchema = new mongoose.Schema(
       type: String,
       required: false,
     },
+    price: {
+      type: Number,
+      required: true,
+    },
   },
   { timestamps: true }
 );
