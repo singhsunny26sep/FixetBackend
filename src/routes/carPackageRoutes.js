@@ -13,7 +13,7 @@ const router = express.Router();
 router.post("/create", createCarPackage);
 
 // Kisi car ke sab packages
-router.get("/car/:carId", getCarPackages);
+router.get("/car", getCarPackages);
 
 // Specific package by ID
 router.get("/:id", getCarPackageById);
