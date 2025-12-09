@@ -2,15 +2,9 @@ import mongoose from "mongoose";
 
 const carPackageSchema = new mongoose.Schema(
   {
-    carId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Car",
-      required: true,
-    },
-
     packageType: {
       type: String,
-      enum: ["exterior", "interior"], // Do type
+      enum: ["exterior", "interior"],
       required: true,
     },
 
@@ -20,7 +14,7 @@ const carPackageSchema = new mongoose.Schema(
     },
 
     image: {
-      type: String, // yaha aap image ka URL save kar sakte ho
+      type: String,
       required: true,
     },
 
