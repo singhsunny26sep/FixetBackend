@@ -3,7 +3,7 @@ import {
   createCategory,
   getCategories,
   deleteCategory,
-} from "../controllers/supportCategoryController.js";
+} from "../controllers/supportcategoryController.js";
 import { protect } from "../middlewares/authMiddleware.js";
 import { adminProtect } from "../middlewares/adminAuthMiddleware.js";
 
