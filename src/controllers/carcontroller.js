@@ -1,14 +1,13 @@
 import {
   createCarService,
-  addCarPriceService,
   getAllCarsService,
-  getCarPricesService,
+  getSingleCarService, // service ko import karo
 } from "../services/carservice.js";
 
-// ================= CREATE CAR =================
+// CREATE CAR
 export const createCar = async (req, res) => {
   try {
-    const { brand, model, price } = req.body;
+    const { brand, model } = req.body;
 
     if (!req.file) {
       return res.status(400).json({
@@ -19,12 +18,7 @@ export const createCar = async (req, res) => {
 
     const image = req.file.path;
 
-    const car = await createCarService({
-      brand,
-      model,
-      price,
-      image,
-    });
+    const car = await createCarService({ brand, model, image });
 
     res.status(201).json({
       success: true,
@@ -39,54 +33,29 @@ export const createCar = async (req, res) => {
   }
 };
 
-// ================= ADD PRICE =================
-export const addCarPrice = async (req, res) => {
-  try {
-    const priceData = await addCarPriceService(req.body);
-
-    res.status(201).json({
-      success: true,
-      message: "Car price added successfully",
-      data: priceData,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
-
-// ================= GET ALL CARS =================
+// GET ALL CARS
 export const getAllCars = async (req, res) => {
   try {
     const cars = await getAllCarsService();
-
-    res.status(200).json({
-      success: true,
-      data: cars,
-    });
+    res.status(200).json({ success: true, data: cars });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+    res.status(500).json({ success: false, message: error.message });
   }
 };
 
-// ================= GET PRICES =================
-export const getCarPrices = async (req, res) => {
+// GET SINGLE CAR
+export const getSingleCar = async (req, res) => {
   try {
     const { carId } = req.params;
 
-    const prices = await getCarPricesService(carId);
+    const car = await getSingleCarService(carId); // call service function
 
     res.status(200).json({
       success: true,
-      data: prices,
+      data: car,
     });
   } catch (error) {
-    res.status(500).json({
+    res.status(404).json({
       success: false,
       message: error.message,
     });
