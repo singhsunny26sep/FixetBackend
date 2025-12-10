@@ -1,94 +1,75 @@
-// models/Booking.js
 import mongoose from "mongoose";
 
-const LocationSchema = new mongoose.Schema({
-  address: String,
-  lat: Number,
-  lng: Number,
-});
-
-const TrackingPoint = new mongoose.Schema({
-  lat: Number,
-  lng: Number,
-  speed: Number,
-  heading: Number,
-  ts: { type: Date, default: Date.now },
-});
-
-const BookingSchema = new mongoose.Schema(
+const bookingSchema = new mongoose.Schema(
   {
     customerId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: "Customer",
       required: true,
     },
+
     staffId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Staff",
-      default: null,
+      default: null, // Assigned later
     },
 
-    // Fields taken from your Figma screenshots:
-    serviceType: { type: String, required: true }, // e.g. "Repair", "Move", "Cleaning"
-    subService: { type: String }, // optional sub-type from UI
-    scheduledFor: { type: Date, required: true }, // scheduled date/time
-    quantity: { type: Number, default: 1 }, // if UI has quantity/units
-    extras: { type: [String], default: [] }, // extra options (checkboxes)
-    notes: { type: String },
+    serviceId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Service",
+      required: true,
+    },
 
-    pickup: { type: LocationSchema, required: true },
-    drop: { type: LocationSchema }, // optional for some services
+    packageId: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+    },
 
-    // pricing & payment
-    fare: { type: Number, default: 0 }, // in paise (INR) to align with Razorpay
-    currency: { type: String, default: "INR" },
-    payment: {
-      provider: { type: String, default: "razorpay" },
-      orderId: String,
-      paymentId: String,
-      signature: String,
-      status: {
-        type: String,
-        enum: ["unpaid", "created", "paid", "failed", "refunded"],
-        default: "unpaid",
-      },
-      capturedAt: Date,
+    scheduleDate: {
+      type: String,
+      required: true,
+    },
+
+    scheduleTime: {
+      type: String,
+      required: true,
     },
 
     status: {
       type: String,
-      enum: [
-        "pending",
-        "assigned",
-        "accepted",
-        "on_the_way",
-        "arrived",
-        "in_progress",
-        "completed",
-        "cancelled",
-      ],
-      default: "pending",
+      enum: ["scheduled", "confirmed", "inprogress", "completed", "cancelled"],
+      default: "scheduled",
     },
 
-    timeline: [
-      {
-        status: String,
-        message: String,
-        ts: { type: Date, default: Date.now },
+    location: {
+      address: String,
+      latitude: Number,
+      longitude: Number,
+    },
+
+    payment: {
+      orderId: String,
+      paymentId: String,
+      signature: String,
+      method: String,
+      amount: Number,
+      status: {
+        type: String,
+        enum: ["pending", "paid", "failed"],
+        default: "pending",
       },
-    ],
+    },
 
-    tracking: [TrackingPoint],
-
-    meta: { type: Object }, // any additional UI metadata from Figma
+    tracking: {
+      liveLocation: {
+        lat: Number,
+        lng: Number,
+      },
+      isTrackingActive: { type: Boolean, default: false },
+    },
   },
   { timestamps: true }
 );
 
-// useful indexes
-BookingSchema.index({ customerId: 1 });
-BookingSchema.index({ staffId: 1 });
-BookingSchema.index({ status: 1 });
-BookingSchema.index({ "pickup.lat": 1, "pickup.lng": 1 });
-
-export const Booking = mongoose.model("Booking", BookingSchema);
+const Booking = mongoose.model("Booking", bookingSchema);
+export default Booking;
