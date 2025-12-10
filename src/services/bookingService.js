@@ -47,7 +47,7 @@ class BookingService {
   // Verify Razorpay Payment
   async verifyPayment({ orderId, paymentId, signature }) {
     const expected = crypto
-      .createHmac("sha256", process.env.RAZORPAY_SECRET)
+      .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
       .update(orderId + "|" + paymentId)
       .digest("hex");
 
