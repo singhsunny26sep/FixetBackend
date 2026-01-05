@@ -4,16 +4,18 @@ const cartSchema = new mongoose.Schema(
   {
     userId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: "Customer",
       required: true,
     },
-    carId: { type: mongoose.Schema.Types.ObjectId, ref: "Car", required: true },
+    carId: { type: mongoose.Schema.Types.ObjectId, ref: "Car" },
     serviceId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Service",
-      required: true,
     },
-
+    packageId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Package",
+    },
     amount: { type: Number, required: true }, // base service price
     expressFee: { type: Number, default: 0 }, // arrive in 30 mins fee
     discount: { type: Number, default: 0 }, // coupon

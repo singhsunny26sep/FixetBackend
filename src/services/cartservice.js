@@ -1,13 +1,11 @@
 import Cart from "../models/cartmodel.js";
 import Service from "../models/carPackageModel.js";
+import Package from "../models/packageModel.js";
 
 export const addCartService = async (data) => {
   const service = await Service.findById(data.serviceId);
-
   if (!service) throw new Error("Service not found");
-
   const totalAmount = service.price;
-
   return await Cart.create({
     ...data,
     amount: service.price,
@@ -15,20 +13,30 @@ export const addCartService = async (data) => {
   });
 };
 
+export const addPackageCartService = async (data) => {
+  const pkg = await Package.findById(data.packageId);
+  if (!pkg) throw new Error("Package not found");
+  const totalAmount = pkg.finalPrice;
+  return await Cart.create({
+    ...data,
+    amount: pkg.finalPrice,
+    totalAmount,
+  });
+};
+
 export const getCartSummaryService = async (userId) => {
-  return await Cart.findOne({ userId }).populate("carId").populate("serviceId");
+  return await Cart.findOne({ userId })
+    .populate("carId")
+    .populate("serviceId")
+    .populate("packageId");
 };
 
 export const updateCartService = async (userId, data) => {
   const cart = await Cart.findOne({ userId });
-
   if (!cart) throw new Error("Cart not found");
-
   if (data.expressFee !== undefined) cart.expressFee = data.expressFee;
   if (data.discount !== undefined) cart.discount = data.discount;
-
   cart.totalAmount = cart.amount + cart.expressFee - cart.discount;
-
   return await cart.save();
 };
 
