@@ -5,8 +5,8 @@ export const createCarPackageService = async (data) => {
   return await newPackage.save();
 };
 
-export const getCarPackagesService = async (carId) => {
-  return await CarPackage.find({ carId });
+export const getCarPackagesService = async () => {
+  return await CarPackage.find().sort({ createdAt: -1 });
 };
 
 export const getCarPackageByIdService = async (id) => {
