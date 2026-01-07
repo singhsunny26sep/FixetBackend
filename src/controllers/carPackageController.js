@@ -25,10 +25,8 @@ export const createCarPackage = async (req, res) => {
 
 export const getCarPackages = async (req, res) => {
   try {
-    const { carId } = req.params;
-
-    const result = await getCarPackagesService(carId);
-
+    // const { carId } = req.params;
+    const result = await getCarPackagesService();
     res.status(200).json({
       success: true,
       data: result,
